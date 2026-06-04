@@ -1,4 +1,57 @@
 @echo off
+title Secure Chat Launcher
+:: --- CONFIGURATION: Point to your cloud source instead of a local IP ---
+set "VERSION_URL=https://raw.githubusercontent.com/YourUsername/secure-chat-app/main/version.txt"
+set "CODE_URL=https://raw.githubusercontent.com/YourUsername/secure-chat-app/main/app.py"
+
+echo ==========================================
+echo        CHECKING FOR APP UPDATES            
+echo ==========================================
+
+:: Step 1: Check internet connectivity to the update server
+curl -s --max-time 3 -I "%VERSION_URL%" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [!] Cloud server unreachable or offline. Running local client fallback...
+    goto LAUNCH
+)
+
+:: Step 2: Download remote version stamp to temporary directory
+curl -s -o "%temp%\remote_version.txt" "%VERSION_URL%"
+
+:: Step 3: Check if local version exists at all
+if not exist "version.txt" (
+    echo [*] Clean installation detected...
+    goto UPDATE
+)
+
+:: Step 4: Core Deduplication / Identity Resolution Check via File Compare
+fc "version.txt" "%temp%\remote_version.txt" >nul 2>&1
+if %errorlevel% eq 0 (
+    echo [+] Application is fully up to date!
+    del "%temp%\remote_version.txt"
+    goto STARTUP_CHECK
+)
+
+:UPDATE
+echo [!] New version detected on the cloud! Downloading release updates...
+curl -s -o "app.py" "%CODE_URL%"
+move /y "%temp%\remote_version.txt" "version.txt" >nul
+echo [+] Update applied successfully!
+
+:STARTUP_CHECK
+set "STARTUP_FOLDER=%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+if not exist "%STARTUP_FOLDER%\SecureChat.lnk" (
+    echo [*] Creating persistent startup linkage...
+    powershell -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%STARTUP_FOLDER%\SecureChat.lnk'); $s.TargetPath = '%~dp0run_chat.bat'; $s.WorkingDirectory = '%~dp0'; $s.Save()"
+    echo [+] Shortcut successfully registered.
+)
+
+
+
+
+
+
+@echo off
 title Secure Chat Setup and Launcher
 echo ==========================================
 echo       SECURE CHAT AUTOMATIC LAUNCHER      

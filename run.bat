@@ -1,8 +1,8 @@
 @echo off
 title Secure Chat Launcher
 :: --- CONFIGURATION: Point to your cloud source instead of a local IP ---
-set "VERSION_URL=https://raw.githubusercontent.com/YourUsername/secure-chat-app/main/version.txt"
-set "CODE_URL=https://raw.githubusercontent.com/YourUsername/secure-chat-app/main/app.py"
+set "VERSION_URL=https://raw.githubusercontent.com/cpri2k26/secure/main/version.txt"
+set "CODE_URL=https://raw.githubusercontent.com/cpri2k26/secure/main/app.py"
 
 echo ==========================================
 echo        CHECKING FOR APP UPDATES            

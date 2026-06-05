@@ -78,7 +78,7 @@ for /f "delims=" %%i in ('python -c "import app; print(getattr(app, '__version__
 if "%LOCAL_VERSION%"=="" set "LOCAL_VERSION=0.0.0"
 
 :: Step 4: Download the text version signature from your GitHub repository
-curl -s -o "%temp%\cloud_version.txt" "%CLOUD_VERSION_URL%"
+curl -s -o "%temp%\cloud_version.txt" "%VERSION_URL%"
 if %errorlevel% neq 0 (
     echo [!] Cloud update registry unreachable. Moving to launch...
     goto PERSISTENCE_CHECK
@@ -98,7 +98,7 @@ if "%LOCAL_VERSION%"=="%CLOUD_VERSION%" (
 
 :DOWNLOAD_UPDATE
 echo [!] New version update discovered! Fetching clean software assets...
-curl -s -o "app.py" "%CLOUD_CODE_URL%"
+curl -s -o "app.py" "%CODE_URL%"
 echo [+] Download complete. Script code upgraded successfully.
 
 :PERSISTENCE_CHECK

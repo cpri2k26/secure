@@ -4,7 +4,8 @@ import os
 import socket
 import threading
 import json
-
+# --- VERSION SEED MAPPING BLOCK ---
+__version__ = "1.0.0"
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QLineEdit, QPushButton, \
                              QComboBox, QSystemTrayIcon, QListWidget, QListWidgetItem, QMenu)
